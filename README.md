@@ -1,1 +1,1 @@
-# CourseworkAppliedStatistics
+# Coursework Applied Statistics
