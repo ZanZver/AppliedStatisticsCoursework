@@ -16,9 +16,13 @@ R 4.2.1
 
 ### Dataset
 Chicago Crime rate
+
 Kaggle: https://www.kaggle.com/datasets/chicago/chicago-crime 
+
 Source: https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-Present/ijzp-q8t2
+
 Paper: https://ieeexplore.ieee.org/abstract/document/8768367
+
 FBI: https://ucr.fbi.gov/nibrs/2011/resources/nibrs-offense-codes/view
 
 
