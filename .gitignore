@@ -14,3 +14,5 @@ Documents/LaTeX/Report.lof
 *.fls
 *.bbl
 Data/Chicago_Crime.csv
+Data/.RData
+Data/.Rhistory
