@@ -16,3 +16,6 @@ Documents/LaTeX/Report.lof
 Data/Chicago_Crime.csv
 Data/.RData
 Data/.Rhistory
+Code/Graphs/*
+Data/EDR/*
+Code/.Rhistory
