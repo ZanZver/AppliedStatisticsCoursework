@@ -1,0 +1,58 @@
+Offense Code,Offense Description,Crime Against
+200,Arson,Property
+13A,Aggravated Assault,Person
+13B,Simple Assault,Person
+13C,Intimidation,Person
+510,Bribery,Property
+220,Burglary/Breaking & Entering,Property
+250,Counterfeiting/Forgery,Property
+290,Destruction/Damage/Vandalism of Property,Property
+35A,Drug/Narcotic Violations,Society
+35B,Drug Equipment Violations,Society
+270,Embezzlement,Property
+210,Extortion/Blackmail,Property
+26A,False Pretenses/Swindle/Confidence Game,Property
+26B,Credit Card/Automated Teller Machine Fraud,Property
+26C,Impersonation,Property
+26D,Welfare Fraud,Property
+26E,Wire Fraud,Property
+39A,Betting/Wagering,Society
+39B,Operating/Promoting/Assisting Gambling,Society
+39C,Gambling Equipment Violations,Society
+39D,Sports Tampering,Society
+09A,Murder & Nonnegligent Manslaughter,Person
+09B,Negligent Manslaughter,Person
+09C,Justifiable Homicide,Person/Not a Crime
+100,Kidnapping/Abduction,Person
+23A,Pocket-picking,Property
+23B,Purse-snatching,Property
+23C,Shoplifting,Property
+23D,Theft From Building,Property
+23E,Theft From Coin-Operated Machine or Device,Property
+23F,Theft From Motor Vehicle,Property
+23G,Theft of Motor Vehicle Parts or Accessories,Property
+23H,All Other Larceny,Property
+240,Motor Vehicle Theft,Property
+370,Pornography/Obscene Material,Society
+40A,Prostitution,Society
+40B,Assisting or Promoting Prostitution,Society
+120,Robbery,Property
+11A,Forcible Rape,Person
+11B,Forcible Sodomy,Person
+11C,Sexual Assault With An Object,Person
+11D,Forcible Fondling,Person
+36A,Incest,Person
+36B,Statutory Rape,Person
+280,Stolen Property Offenses,Property
+520,Weapon Law Violations,Society
+90A,Bad Checks,Property
+90B,Curfew/Loitering/Vagrancy Violations,Society
+90C,Disorderly Conduct,Society
+90D,Driving Under the Influence,Society
+90E,Drunkenness,Society
+90F,"Family Offenses, Nonviolent",Society
+90G,Liquor Law Violations,Society
+90H,Peeping Tom,Society
+90I,Runaway,Not a Crime
+90J,Trespass of Real Property,Society
+90Z,All Other Offenses,"Person,Property, or Society"
