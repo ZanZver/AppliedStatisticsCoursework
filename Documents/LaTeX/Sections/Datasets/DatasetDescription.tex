@@ -1,131 +1,244 @@
 
 \subsection{Dataset description}\label{subsection}
 describe and justify the datasets used to show what information is contained in the datasets and how it aids to answer the relevant questions. If the description is very long, then summarise the key information and detail the columns in the datasets in appropriate appendices. Also, properly cite the dataset in the References section and include their exact hyperlinks; \newline
-(Data Pre-processing): discuss any data pre-processing that is required to prepare the data for subsequent analysis. 
+
 
 \begin{center}
-\begin{longtable}{|m{6em}|m{18em}|m{7em}|}
-    \hline
-        Column Name & 
-        Description & 
-        Type\\
-    \hline
-        ID & 
-        Unique identifier for the record. & 
-        Number\\
-    \hline
-        Case Number & 
-        The Chicago Police Department RD Number (Records Division Number),
-        which is unique to the incident. & 
-        Plain Text\\
-    \hline
-        Date & 
-        Date when the incident occurred. this is sometimes a best estimate. & 
-        Date and Time\\
-    \hline
-        Block & 
-        The partially redacted address where the incident occurred, 
-        placing it on the same block as the actual address. & 
-        Plain Text\\
-    \hline
-        IUCR & 
-        The Illinois Unifrom Crime Reporting code. This is directly linked 
-        to the Primary Type and Description. See the list of IUCR codes 
-        at https://data.cityofchicago.org/d/c7ck-438e. & 
-        Plain Text\\
-    \hline
-        Primary Type & 
-        The primary description of the IUCR code. & 
-        Plain Text\\
-    \hline
-        Description & 
-        The secondary description of the IUCR code, 
-        a subcategory of the primary description. & 
-        Plain Text\\
-    \hline
-        Location Description & 
-        Description of the location where the incident occurred. & 
-        Plain Text\\
-    \hline
-        Arrest & 
-        Indicates whether an arrest was made. & 
-        Checkbox\\
-    \hline
-        Domestic & 
-        Indicates whether the incident was domestic-related as 
-        defined by the Illinois Domestic Violence Act. & 
-        Checkbox\\
-    \hline
-        Beat & 
-        Indicates the beat where the incident occurred. A beat is the 
-        smallest police geographic area – each beat has a dedicated 
-        police beat car. Three to five beats make up a police sector, 
-        and three sectors make up a police district. The Chicago Police 
-        Department has 22 police districts. See the beats 
-        at https://data.cityofchicago.org/d/aerh-rz74. & 
-        Plain Text\\
-    \hline
-        District & 
-        Indicates the police district where the incident occurred.  
-        See the districts at https://data.cityofchicago.org/d/fthy-xz3r. & 
-        Plain Text\\
-    \hline
-        Ward & 
-        The ward (City Council district) where the incident occurred. 
-        See the wards at https://data.cityofchicago.org/d/sp34-6z76. & 
-        Number\\
-    \hline
-        Community Area & 
-        Indicates the community area where the incident occurred. Chicago has 77 community 
-        areas. See the community areas at https://data.cityofchicago.org/d/cauq-8yn6. & 
-        Plain Text\\
-    \hline
-        FBI Code & 
-        Indicates the crime classification as outlined in the FBI's National Incident-Based 
-        Reporting System (NIBRS). See the Chicago Police Department listing of these classifications at
-        https://ucr.fbi.gov/nibrs/2011/resources/nibrs-offense-codes/view
-        & 
-        Plain Text\\
-    \hline
-        X Coordinate & 
-        The x coordinate of the location where the incident occurred in State Plane Illinois 
-        East NAD 1983 projection. This location is shifted from the actual location for 
-        partial redaction but falls on the same block. & 
-        Number\\
-    \hline
-        Y Coordinate & 
-        The y coordinate of the location where the incident occurred in State Plane Illinois 
-        East NAD 1983 projection. This location is shifted from the actual location for 
-        partial redaction but falls on the same block. & 
-        Number\\
-    \hline
-        Year & 
-        Year the incident occurred. & 
-        Number\\
-    \hline
-        Updated On & 
-        Date and time the record was last updated. & 
-        Date and Time\\
-    \hline
-        Latitude & 
-        The latitude of the location where the incident occurred. This location is shifted 
-        from the actual location for partial redaction but falls on the same block. & 
-        Number\\
-    \hline
-        Longitude & 
-        The longitude of the location where the incident occurred. This location is shifted 
-        from the actual location for partial redaction but falls on the same block. & 
-        Number\\
-    \hline
-        Location & 
-        The location where the incident occurred in a format that allows for creation of 
-        maps and other geographic operations on this data portal. This location is shifted 
-        from the actual location for partial redaction but falls on the same block. & 
-        Location\\
-    \hline
-\caption{Main dataset attributes}
+    \begin{longtable}{|m{6em}|m{18em}|m{7em}|}
+        \hline
+            Column Name & 
+            Description & 
+            Type\\
+        \hline
+            ID & 
+            Unique identifier for the record. & 
+            Number\\
+        \hline
+            Case Number & 
+            The Chicago Police Department RD Number (Records Division Number),
+            which is unique to the incident. & 
+            Plain Text\\
+        \hline
+            Date & 
+            Date when the incident occurred. this is sometimes a best estimate. & 
+            Date and Time\\
+        \hline
+            Block & 
+            The partially redacted address where the incident occurred, 
+            placing it on the same block as the actual address. & 
+            Plain Text\\
+        \hline
+            IUCR & 
+            The Illinois Unifrom Crime Reporting code. This is directly linked 
+            to the Primary Type and Description. See the list of IUCR codes 
+            at https://data.cityofchicago.org/d/c7ck-438e. & 
+            Plain Text\\
+        \hline
+            Primary Type & 
+            The primary description of the IUCR code. & 
+            Plain Text\\
+        \hline
+            Description & 
+            The secondary description of the IUCR code, 
+            a subcategory of the primary description. & 
+            Plain Text\\
+        \hline
+            Location Description & 
+            Description of the location where the incident occurred. & 
+            Plain Text\\
+        \hline
+            Arrest & 
+            Indicates whether an arrest was made. & 
+            Checkbox\\
+        \hline
+            Domestic & 
+            Indicates whether the incident was domestic-related as 
+            defined by the Illinois Domestic Violence Act. & 
+            Checkbox\\
+        \hline
+            Beat & 
+            Indicates the beat where the incident occurred. A beat is the 
+            smallest police geographic area – each beat has a dedicated 
+            police beat car. Three to five beats make up a police sector, 
+            and three sectors make up a police district. The Chicago Police 
+            Department has 22 police districts. See the beats 
+            at https://data.cityofchicago.org/d/aerh-rz74. & 
+            Plain Text\\
+        \hline
+            District & 
+            Indicates the police district where the incident occurred.  
+            See the districts at https://data.cityofchicago.org/d/fthy-xz3r. & 
+            Plain Text\\
+        \hline
+            Ward & 
+            The ward (City Council district) where the incident occurred. 
+            See the wards at https://data.cityofchicago.org/d/sp34-6z76. & 
+            Number\\
+        \hline
+            Community Area & 
+            Indicates the community area where the incident occurred. Chicago has 77 community 
+            areas. See the community areas at https://data.cityofchicago.org/d/cauq-8yn6. & 
+            Plain Text\\
+        \hline
+            FBI Code & 
+            Indicates the crime classification as outlined in the FBI's National Incident-Based 
+            Reporting System (NIBRS). See the Chicago Police Department listing of these classifications at
+            https://ucr.fbi.gov/nibrs/2011/resources/nibrs-offense-codes/view
+            & 
+            Plain Text\\
+        \hline
+            X Coordinate & 
+            The x coordinate of the location where the incident occurred in State Plane Illinois 
+            East NAD 1983 projection. This location is shifted from the actual location for 
+            partial redaction but falls on the same block. & 
+            Number\\
+        \hline
+            Y Coordinate & 
+            The y coordinate of the location where the incident occurred in State Plane Illinois 
+            East NAD 1983 projection. This location is shifted from the actual location for 
+            partial redaction but falls on the same block. & 
+            Number\\
+        \hline
+            Year & 
+            Year the incident occurred. & 
+            Number\\
+        \hline
+            Updated On & 
+            Date and time the record was last updated. & 
+            Date and Time\\
+        \hline
+            Latitude & 
+            The latitude of the location where the incident occurred. This location is shifted 
+            from the actual location for partial redaction but falls on the same block. & 
+            Number\\
+        \hline
+            Longitude & 
+            The longitude of the location where the incident occurred. This location is shifted 
+            from the actual location for partial redaction but falls on the same block. & 
+            Number\\
+        \hline
+            Location & 
+            The location where the incident occurred in a format that allows for creation of 
+            maps and other geographic operations on this data portal. This location is shifted 
+            from the actual location for partial redaction but falls on the same block. & 
+            Location\\
+        \hline
+    \caption{Main dataset attributes}
 \end{longtable}
 \end{center}
+
+(Data Pre-processing): discuss any data pre-processing that is required to prepare the data for subsequent analysis. 
+
+Table X is representing removed attributes and reasons why they are removed.
+
+\begin{center}
+    \begin{longtable}{|m{10em}|m{21em}|}
+        \hline
+            Column Name & 
+            Description \\
+        \hline
+            X.Coordinate & 
+            Not useful to us. Location can be obtain from Latitude and Longitude coordinate.\\
+        \hline
+            Y.Coordinate & 
+            Not useful to us. Location can be obtain from Latitude and Longitude coordinate.\\
+        \hline
+            Location & 
+            Not useful to us. Location can be obtain from Latitude and Longitude coordinate.\\
+        \hline
+            Year & 
+            Attribute Year is the same as in Date section. Since we don't want duplicate values, it is removed.\\
+        \hline
+    \caption{Removed attributes}
+\end{longtable}
+\end{center}
+
+\begin{center}
+    \begin{longtable}{|m{6em}|m{7em}|m{18em}|}
+        \hline
+            Column Name & 
+            New data type & 
+            Description\\
+        \hline
+            ID & 
+            integer &
+            ID is a positive whole number. To eliminate decimal places, integer was chosen.\\
+        \hline
+            Case Number & 
+            character &
+            Case Number is combination of two letters and 6 numbers. Ideally we would split two character into one column and numbers into another. At the moment we cannot verify if there are any exceptions where there would be more (or less) than 2 characters. Due to aforementioned reasons, the whole column is saved as a character. \\
+        \hline
+            Date & 
+            POSIXct & 
+            Date is originally stored as a string. To have more control over that, we are transforming it as POSIXct with the year-month-day hour:minute:second format. Originally time is indicated with AM/PM, but this is converted to 24h notation as well.\\
+        \hline
+            Block & 
+            character & 
+            Block is saved as a character due to mix of numbers and letters. This contains house number and street. House number has first 3 or 4 characters are numbers, while last 1 or 2 are X symbols. This is done to anonymize the data. We could separate house number and street into two different columns, but this will not be done since house number is not much of the use at the moment. A lot of information can be gathered from Location column anyway.\\
+        \hline
+            IUCR & 
+            character & 
+            IUCR column is saved as character due to mix of numbers and letters. There is a predetermined list of IUCR codes that we do check against, to remove all of the codes which are not set as predetermined.\\
+        \hline
+            Primary Type & 
+            character & 
+            This is a short crime description. \\
+        \hline
+            Description & 
+            character & 
+            Longer crime description.\\
+        \hline
+            Location Description & 
+            character & 
+            Location description where crime was committed.\\
+        \hline
+            Arrest & 
+            logical & 
+            Logical information if person was arrested (as TRUE) or not (as FALSE).\\
+        \hline
+            Domestic & 
+            logical & 
+            Logical information if crime was domestic (as TRUE) or not (as FALSE).\\
+        \hline
+            Beat & 
+            integer & 
+            Beat is a positive whole number that indicates location of the crime (as an ID). Numbers are cross referenced with data in PoliceBeat report. Mismatches are removed.\\
+        \hline
+            District & 
+            integer & 
+            This is a positive whole number that indicates what police district handled the crime. District number is verified with the data found in PoliceDistrict file. Mismatches are removed.\\
+        \hline
+            Ward & 
+            integer & 
+            Ward is a positive whole number that locates where crime happened. Number is an ID of City Council district.\\
+        \hline
+            Community Area & 
+            integer & 
+            Community Area is an ID presented as whole positive number. It is checked against CommAreas file. Only matches are kept.\\
+        \hline
+            FBI Code & 
+            character & 
+            This is a crime code indicated by FBI. It contains letters and numbers, therefore it is saved as a character.\\
+        \hline
+            Updated On & 
+            POSIXct & 
+            Date is originally stored as a string. To have more control over that, we are transforming it as POSIXct with the year-month-day hour:minute:second format. Originally time is indicated with AM/PM, but this is converted to 24h notation as well.\\
+        \hline
+            Latitude & 
+            numeric & 
+            LAT is saved as numeric since it represents positive numbers with decimal places. It would be useful to have a range to limit LAT that is out of range.\\
+        \hline
+            Longitude & 
+            numeric & 
+            LON is saved as numeric since it represents negative numbers with decimal places. It would be useful to have a range to limit LON that is out of range.\\
+        \hline
+    \caption{Dataset attributes with new types}
+\end{longtable}
+\end{center}
+
+
+
+
 
 Illinois Uniform Crime Reporting (IUCR) \newline
 https://data.cityofchicago.org/Public-Safety/Chicago-Police-Department-Illinois-Uniform-Crime-R/c7ck-438e
