@@ -1,0 +1,603 @@
+
+\subsection{Dataset description}\label{subsection}
+describe and justify the datasets used to show what information is contained in the datasets and how it aids to answer the relevant questions. If the description is very long, then summarise the key information and detail the columns in the datasets in appropriate appendices. Also, properly cite the dataset in the References section and include their exact hyperlinks; \newline
+(Data Pre-processing): discuss any data pre-processing that is required to prepare the data for subsequent analysis. 
+
+\begin{center}
+\begin{longtable}{|m{6em}|m{18em}|m{7em}|}
+    \hline
+        Column Name & 
+        Description & 
+        Type\\
+    \hline
+        ID & 
+        Unique identifier for the record. & 
+        Number\\
+    \hline
+        Case Number & 
+        The Chicago Police Department RD Number (Records Division Number),
+        which is unique to the incident. & 
+        Plain Text\\
+    \hline
+        Date & 
+        Date when the incident occurred. this is sometimes a best estimate. & 
+        Date and Time\\
+    \hline
+        Block & 
+        The partially redacted address where the incident occurred, 
+        placing it on the same block as the actual address. & 
+        Plain Text\\
+    \hline
+        IUCR & 
+        The Illinois Unifrom Crime Reporting code. This is directly linked 
+        to the Primary Type and Description. See the list of IUCR codes 
+        at https://data.cityofchicago.org/d/c7ck-438e. & 
+        Plain Text\\
+    \hline
+        Primary Type & 
+        The primary description of the IUCR code. & 
+        Plain Text\\
+    \hline
+        Description & 
+        The secondary description of the IUCR code, 
+        a subcategory of the primary description. & 
+        Plain Text\\
+    \hline
+        Location Description & 
+        Description of the location where the incident occurred. & 
+        Plain Text\\
+    \hline
+        Arrest & 
+        Indicates whether an arrest was made. & 
+        Checkbox\\
+    \hline
+        Domestic & 
+        Indicates whether the incident was domestic-related as 
+        defined by the Illinois Domestic Violence Act. & 
+        Checkbox\\
+    \hline
+        Beat & 
+        Indicates the beat where the incident occurred. A beat is the 
+        smallest police geographic area – each beat has a dedicated 
+        police beat car. Three to five beats make up a police sector, 
+        and three sectors make up a police district. The Chicago Police 
+        Department has 22 police districts. See the beats 
+        at https://data.cityofchicago.org/d/aerh-rz74. & 
+        Plain Text\\
+    \hline
+        District & 
+        Indicates the police district where the incident occurred.  
+        See the districts at https://data.cityofchicago.org/d/fthy-xz3r. & 
+        Plain Text\\
+    \hline
+        Ward & 
+        The ward (City Council district) where the incident occurred. 
+        See the wards at https://data.cityofchicago.org/d/sp34-6z76. & 
+        Number\\
+    \hline
+        Community Area & 
+        Indicates the community area where the incident occurred. Chicago has 77 community 
+        areas. See the community areas at https://data.cityofchicago.org/d/cauq-8yn6. & 
+        Plain Text\\
+    \hline
+        FBI Code & 
+        Indicates the crime classification as outlined in the FBI's National Incident-Based 
+        Reporting System (NIBRS). See the Chicago Police Department listing of these classifications at
+        https://ucr.fbi.gov/nibrs/2011/resources/nibrs-offense-codes/view
+        & 
+        Plain Text\\
+    \hline
+        X Coordinate & 
+        The x coordinate of the location where the incident occurred in State Plane Illinois 
+        East NAD 1983 projection. This location is shifted from the actual location for 
+        partial redaction but falls on the same block. & 
+        Number\\
+    \hline
+        Y Coordinate & 
+        The y coordinate of the location where the incident occurred in State Plane Illinois 
+        East NAD 1983 projection. This location is shifted from the actual location for 
+        partial redaction but falls on the same block. & 
+        Number\\
+    \hline
+        Year & 
+        Year the incident occurred. & 
+        Number\\
+    \hline
+        Updated On & 
+        Date and time the record was last updated. & 
+        Date and Time\\
+    \hline
+        Latitude & 
+        The latitude of the location where the incident occurred. This location is shifted 
+        from the actual location for partial redaction but falls on the same block. & 
+        Number\\
+    \hline
+        Longitude & 
+        The longitude of the location where the incident occurred. This location is shifted 
+        from the actual location for partial redaction but falls on the same block. & 
+        Number\\
+    \hline
+        Location & 
+        The location where the incident occurred in a format that allows for creation of 
+        maps and other geographic operations on this data portal. This location is shifted 
+        from the actual location for partial redaction but falls on the same block. & 
+        Location\\
+    \hline
+\caption{Main dataset attributes}
+\end{longtable}
+\end{center}
+
+Illinois Uniform Crime Reporting (IUCR) \newline
+https://data.cityofchicago.org/Public-Safety/Chicago-Police-Department-Illinois-Uniform-Crime-R/c7ck-438e
+\begin{center}
+\begin{longtable}{|m{6em}|m{18em}|m{7em}|}
+    \hline
+    Column Name & 
+    Description & 
+    Type\\
+    \hline
+    IUCR & 
+    Crime ID & 
+    Plain Text\\
+    \hline
+    Primary description & 
+    First (main) description of the crime & 
+    Plain Text\\
+    \hline
+    Secondary description & 
+    Additional description of the crime & 
+    Plain Text\\
+    \hline
+    Index code & 
+    There are 2 codes, "I" (Index) and "N" (Non-Index). "I" code indicates crimes that are collected nation-wide (by FBI) while "N" is for other (usually smaller) crimes. & 
+    Plain Text\\
+    \hline
+    Active & 
+    Whether the code is active. Retired codes (No) are present in this dataset for historical reference. There is a filtered view for this dataset showing only active codes. & 
+    Boolean\\
+    \hline
+\caption{IUCR supporting dataset attributes}
+\end{longtable}
+\end{center}
+
+Beats \newline
+https://data.cityofchicago.org/Public-Safety/Boundaries-Police-Beats-current-/aerh-rz74
+\begin{center}
+\begin{longtable}{|m{6em}|m{18em}|m{7em}|}
+    \hline
+    Column Name & 
+    Description & 
+    Type\\
+    \hline
+    The\_geom & 
+    List of locations (as multi polygon) containing LAT and LON. & 
+    Multipolygon - location\\
+    \hline
+    District & 
+    ID of the police district & 
+    Number\\
+    \hline
+    Sector & 
+    Geographically divided area with associated ID & 
+    Number\\
+    \hline
+    Beat & 
+    No description. & 
+    Number\\
+    \hline
+    Beat\_num & 
+    Indicates Beat ID from main dataset &
+    Number\\
+    \hline
+\caption{Beats supporting dataset attributes}
+\end{longtable}
+\end{center}
+
+Police Districts \newline
+https://data.cityofchicago.org/Public-Safety/Boundaries-Police-Districts-current-/fthy-xz3r
+\begin{center}
+\begin{longtable}{|m{6em}|m{18em}|m{7em}|}
+    \hline
+    Column Name & 
+    Description & 
+    Type\\
+    \hline
+    The\_geom & 
+    List of locations (as multi polygon) containing LAT and LON where districts operate.  & 
+    Multipolygon - location\\
+    \hline
+    Dist\_label & 
+    Name of the district & 
+    Plain text\\
+    \hline
+    Dist\_num & 
+    Number of the district & 
+    Plain text\\
+    \hline
+\caption{Police districts supporting dataset attributes}
+\end{longtable}
+\end{center}
+
+Community Areas \newline
+https://data.cityofchicago.org/Facilities-Geographic-Boundaries/Boundaries-Community-Areas-current-/cauq-8yn6
+\begin{center}
+\begin{longtable}{|m{6em}|m{18em}|m{7em}|}
+    \hline
+    Column Name & 
+    Description & 
+    Type\\
+    \hline
+    The\_geom & 
+    List of locations (as multi polygon) containing LAT and LON. & 
+    Multipolygon - location\\
+    \hline
+    Perimeter & 
+    No description. & 
+    Number\\
+    \hline
+    Area & 
+    No description. & 
+    Number\\
+    \hline
+    Comarea\_ & 
+    No description. & 
+    Number\\
+    \hline
+    Comarea\_ID & 
+    No description. & 
+    Number\\
+    \hline
+    Area\_numbe & 
+    ID of the area. This is the the same as in main dataset. Note, column name does not have r in number. & 
+    Number\\
+    \hline
+    Community & 
+    Name of the community / region. & 
+    Plain Text\\
+    \hline
+    Area\_num\_1 & 
+    ID of the area. This is the the same as in main dataset. Note, column name does not have r in number. & 
+    Number\\
+    \hline
+    Shape\_area & 
+    No description. & 
+    Number\\
+    \hline
+    Shape\_len & 
+    No description. & 
+    Number\\
+    \hline
+\caption{Community area supporting dataset attributes}
+\end{longtable}
+\end{center}
+
+
+FBI codes \newline
+https://ucr.fbi.gov/nibrs/2011/resources/nibrs-offense-codes/view \newline
+Group A Offenses
+\begin{center}
+\begin{longtable}{|m{8em} m{16em} m{7em}|}
+    \hline
+    Offense Code & 
+    Offense Description & 
+    Crime Against\\
+    \hline
+    
+    Arson & & \\
+    \hline
+    200 &
+    Arson &
+    Property\\
+    \hline
+
+    Assault Offenses & & \\
+    \hline
+    13A &
+    Aggravated Assault &
+    Person\\
+    \hline
+    13B &
+    Simple Assault &
+    Person\\
+    \hline
+    13C &
+    Intimidation &
+    Person\\
+    \hline
+
+    Bribery & & \\
+    \hline
+    510 &
+    Bribery &
+    Property\\
+    \hline
+
+    Burglary/Breaking \& Entering & & \\
+    \hline
+    220 &
+    Burglary/Breaking \& Entering &
+    Property\\
+    \hline
+
+    
+    Counterfeiting/Forgery & & \\
+    \hline
+    250 &
+    Counterfeiting/Forgery &
+    Property\\
+    \hline
+
+    Destruction/Damage/Vandalism of Property & & \\
+    \hline
+    290 &
+    Destruction/Damage/Vandalism of Property &
+    Property\\
+    \hline
+
+    Drug/Narcotic Offenses & & \\
+    \hline
+    35A &
+    Drug/Narcotic Violations &
+    Society\\
+    \hline
+    35B &
+    Drug Equipment Violations &
+    Society\\
+    \hline
+
+    Embezzlement & & \\
+    \hline
+    270 &
+    Embezzlement &
+    Property\\
+    \hline
+
+    Extortion/Blackmail & & \\
+    \hline
+    210 &
+    Extortion/Blackmail &
+    Property\\
+    \hline
+
+    Fraud Offenses & & \\
+    \hline
+    26A &
+    False Pretenses/Swindle/Confidence Game &
+    Property\\
+    \hline
+    26B &
+    Credit Card/Automated Teller Machine Fraud &
+    Property\\
+    \hline
+    26C &
+    Extortion/Blackmail &
+    Property\\
+    \hline
+    26D &
+    Welfare Fraud &
+    Property\\
+    \hline
+    26E &
+    Wire Fraud &
+    Property\\
+    \hline
+
+    Gambling Offenses & & \\
+    \hline
+    39A &
+    Betting/Wagering &
+    Property\\
+    \hline
+    39B &
+    Operating/Promoting/Assisting Gambling &
+    Property\\
+    \hline
+    39C &
+    Gambling Equipment Violations &
+    Property\\
+    \hline
+    39D &
+    Sports Tampering &
+    Property\\
+    \hline
+
+    Homicide Offenses & & \\
+    \hline
+    09A &
+    Murder \& Non-negligent Manslaughter &
+    Property\\
+    \hline
+    09B &
+    Negligent Manslaughter &
+    Property\\
+    \hline
+    09C &
+    Justifiable Homicide &
+    Person/Not a Crime\\
+    \hline
+
+    Kidnapping/Abduction & & \\
+    \hline
+    100 &
+    Kidnapping/Abduction &
+    Person\\
+    \hline
+
+    Larceny/Theft Offenses & & \\
+    \hline
+    23A &
+    Pocket-picking &
+    Person\\
+    \hline
+    23B &
+    Purse-snatching &
+    Person\\
+    \hline
+    23C &
+    Shoplifting &
+    Person\\
+    \hline
+    23D &
+    Theft From Building &
+    Person\\
+    \hline
+    23E &
+    Theft From Coin-Operated Machine or Device &
+    Person\\
+    \hline
+    23F &
+    Theft From Motor Vehicle &
+    Person\\
+    \hline
+    23G &
+    Theft of Motor Vehicle Parts or Accessories &
+    Person\\
+    \hline
+    23H &
+    All Other Larceny &
+    Person\\
+    \hline
+
+    Motor Vehicle & Theft & \\
+    \hline
+    240 &
+    Motor Vehicle Theft &
+    Property\\
+    \hline
+
+    Pornography / & Obscene Material & \\
+    \hline
+    370 &
+    Pornography/Obscene Material &
+    Society\\
+    \hline
+
+    Prostitution Offenses & & \\
+    \hline
+    40A &
+    Prostitution &
+    Society\\
+    \hline
+    40B &
+    Assisting or Promoting Prostitution &
+    Society\\
+    \hline
+
+    Robbery & & \\
+    \hline
+    120 &
+    Robbery &
+    Property\\
+    \hline
+
+    Sex Offenses, Forcible & & \\
+    \hline
+    11A &
+    Forcible Rape &
+    Person\\
+    \hline
+    11B &
+    Forcible Sodomy &
+    Person\\
+    \hline
+    11C &
+    Sexual Assault With An Object &
+    Person\\
+    \hline
+    11D &
+    Forcible Fondling &
+    Person\\
+    \hline
+
+    Sex Offenses, Nonforcible & & \\
+    \hline
+    36A &
+    Incest &
+    Person\\
+    \hline
+    36B &
+    Statutory Rape &
+    Person\\
+    \hline
+
+    Stolen Property Offenses & & \\
+    \hline
+    280 &
+    Stolen Property Offenses &
+    Property\\
+    \hline
+
+    Weapon Law Violations & & \\
+    \hline
+    520 &
+    Weapon Law Violations &
+    Society\\
+    \hline
+\caption{FBI supporting dataset attributes group A}
+\end{longtable}
+\end{center}
+
+Group B Offenses
+\begin{center}
+\begin{longtable}{|m{8em} m{16em} m{7em}|}
+    \hline
+    Offense Code & 
+    Offense Description & 
+    Crime Against\\
+    \hline
+    90A & 
+    Bad Checks & 
+    Property\\
+    \hline
+    90B & 
+    Curfew/Loitering/Vagrancy Violations & 
+    Society\\
+    \hline
+    90C & 
+    Disorderly Conduct & 
+    Society\\
+    \hline
+    90D & 
+    Driving Under the Influence & 
+    Society\\
+    \hline
+    90E & 
+    Drunkenness & 
+    Society\\
+    \hline
+    90F & 
+    Family Offenses, Nonviolent & 
+    Society\\
+    \hline
+    90G & 
+    Liquor Law Violations & 
+    Society\\
+    \hline
+    90H & 
+    Peeping Tom & 
+    Society\\
+    \hline
+    90I & 
+    Runaway & 
+    Not a Crime\\
+    \hline
+    90J & 
+    Trespass of Real Property & 
+    Society\\
+    \hline
+    90Z & 
+    All Other Offenses & 
+    Person, Property, or Society\\
+    \hline
+\caption{FBI supporting dataset attributes group A}
+\end{longtable}
+\end{center}
+
+
+
+TO DO:\newline
+1- data import \newline
+import data to R, break data to date \& time, remove X and y coordinate, remove location\newline
+DONE!!!!!!! \newline
+2- remove empty data and remove outliers \newline
+3- see how data is shaped, what correlations are formed, etc... \newline
