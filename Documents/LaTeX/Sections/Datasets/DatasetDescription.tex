@@ -1,0 +1,111 @@
+\subsection{Dataset description}\label{subsection}
+describe and justify the datasets used to show what information is contained in the datasets and how it aids to answer the relevant questions. If the description is very long, then summarise the key information and detail the columns in the datasets in appropriate appendices. Also, properly cite the dataset in the References section and include their exact hyperlinks; \newline
+
+(Data Pre-processing): discuss any data pre-processing that is required to prepare the data for subsequent analysis. 
+
+Table X is representing removed attributes and reasons why they are removed.
+
+\begin{center}
+    \begin{longtable}{|m{10em}|m{21em}|}
+        \hline
+            Column Name & 
+            Description \\
+        \hline
+            X.Coordinate & 
+            Not useful to us. Location can be obtain from Latitude and Longitude coordinate.\\
+        \hline
+            Y.Coordinate & 
+            Not useful to us. Location can be obtain from Latitude and Longitude coordinate.\\
+        \hline
+            Location & 
+            Not useful to us. Location can be obtain from Latitude and Longitude coordinate.\\
+        \hline
+            Year & 
+            Attribute Year is the same as in Date section. Since we don't want duplicate values, it is removed.\\
+        \hline
+    \caption{Removed attributes}
+\end{longtable}
+\end{center}
+
+\begin{center}
+    \begin{longtable}{|m{6em}|m{7em}|m{18em}|}
+        \hline
+            Column Name & 
+            New data type & 
+            Description\\
+        \hline
+            ID & 
+            integer &
+            ID is a positive whole number. To eliminate decimal places, integer was chosen.\\
+        \hline
+            Case Number & 
+            character &
+            Case Number is combination of two letters and 6 numbers. Ideally we would split two character into one column and numbers into another. At the moment we cannot verify if there are any exceptions where there would be more (or less) than 2 characters. Due to aforementioned reasons, the whole column is saved as a character. \\
+        \hline
+            Date & 
+            POSIXct & 
+            Date is originally stored as a string. To have more control over that, we are transforming it as POSIXct with the year-month-day hour:minute:second format. Originally time is indicated with AM/PM, but this is converted to 24h notation as well.\\
+        \hline
+            Block & 
+            character & 
+            Block is saved as a character due to mix of numbers and letters. This contains house number and street. House number has first 3 or 4 characters are numbers, while last 1 or 2 are X symbols. This is done to anonymize the data. We could separate house number and street into two different columns, but this will not be done since house number is not much of the use at the moment. A lot of information can be gathered from Location column anyway.\\
+        \hline
+            IUCR & 
+            character & 
+            IUCR column is saved as character due to mix of numbers and letters. There is a predetermined list of IUCR codes that we do check against, to remove all of the codes which are not set as predetermined.\\
+        \hline
+            Primary Type & 
+            character & 
+            This is a short crime description. \\
+        \hline
+            Description & 
+            character & 
+            Longer crime description.\\
+        \hline
+            Location Description & 
+            character & 
+            Location description where crime was committed.\\
+        \hline
+            Arrest & 
+            logical & 
+            Logical information if person was arrested (as TRUE) or not (as FALSE).\\
+        \hline
+            Domestic & 
+            logical & 
+            Logical information if crime was domestic (as TRUE) or not (as FALSE).\\
+        \hline
+            Beat & 
+            integer & 
+            Beat is a positive whole number that indicates location of the crime (as an ID). Numbers are cross referenced with data in PoliceBeat report. Mismatches are removed.\\
+        \hline
+            District & 
+            integer & 
+            This is a positive whole number that indicates what police district handled the crime. District number is verified with the data found in PoliceDistrict file. Mismatches are removed.\\
+        \hline
+            Ward & 
+            integer & 
+            Ward is a positive whole number that locates where crime happened. Number is an ID of City Council district.\\
+        \hline
+            Community Area & 
+            integer & 
+            Community Area is an ID presented as whole positive number. It is checked against CommAreas file. Only matches are kept.\\
+        \hline
+            FBI Code & 
+            character & 
+            This is a crime code indicated by FBI. It contains letters and numbers, therefore it is saved as a character.\\
+        \hline
+            Updated On & 
+            POSIXct & 
+            Date is originally stored as a string. To have more control over that, we are transforming it as POSIXct with the year-month-day hour:minute:second format. Originally time is indicated with AM/PM, but this is converted to 24h notation as well.\\
+        \hline
+            Latitude & 
+            numeric & 
+            LAT is saved as numeric since it represents positive numbers with decimal places. It would be useful to have a range to limit LAT that is out of range.\\
+        \hline
+            Longitude & 
+            numeric & 
+            LON is saved as numeric since it represents negative numbers with decimal places. It would be useful to have a range to limit LON that is out of range.\\
+        \hline
+    \caption{Dataset attributes with new types}
+\end{longtable}
+\end{center}
