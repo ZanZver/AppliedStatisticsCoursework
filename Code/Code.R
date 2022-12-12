@@ -14,7 +14,6 @@
 #==============================================================================================================
 
 
-
 #==============================================================================================================
 # Library imports
 #==============================================================================================================
@@ -27,10 +26,18 @@ library(lubridate)
 library(hrbrthemes)
 #install.packages('e1071')
 library(e1071)
+library(BSDA)
 
 #==============================================================================================================
 # Functions
 #==============================================================================================================
+
+format_number <- function(x) {
+  if (nchar(as.character(x)) != 3){
+    x = paste(x,"0", sep = "")
+  }
+  return(as.numeric(x))
+}
 
 mergeData <- function(data1, data2){
   newData <- rbind(data1, data2)
@@ -63,28 +70,56 @@ removeNA <- function(data){
 }
 
 dataStatistics <- function(data){
-  print(paste("Mean:", mean(data)))
-  print(paste("Median:", median(data)))
-  print(paste("Standard deviation:", sd(data)))
-  print(paste("Min:", min(data)))
-  print(paste("Max:", max(data)))
-  print(paste("Skewness:", skewness(data)))
-  print(paste("Number of attributes:", length(data)))
+  myMean     <- formatC(mean(data),width=5,format='f',digits=2,flag='0')
+  myMedian   <- formatC(median(data),width=5,format='f',digits=2,flag='0')
+  mySd       <- formatC(sd(data),width=5,format='f',digits=2,flag='0')
+  myMin      <- formatC(min(data),width=5,format='f',digits=2,flag='0')
+  myMax      <- formatC(max(data),width=5,format='f',digits=2,flag='0')
+  mySkewness <- formatC(skewness(data),width=5,format='f',digits=2,flag='0')
+  myLength   <- format(length(data), digits = 6)
+  
+  l1 <- "+-------------------------------------------+\n"
+  l2 <- paste(paste("| Mean                 |", myMean), "             |\n")
+  l3 <- paste(paste("| Median               |", myMedian),"             |\n")
+  l4 <- paste(paste("| Standard deviation   |", mySd),"             |\n")
+  l5 <- paste(paste("| Min                  |", myMin),"             |\n")
+  l6 <- paste(paste("| Max                  |", myMax),"            |\n")
+  l7 <- paste(paste("| Skewness             |", mySkewness),"             |\n")
+  l8 <- paste(paste("| Number of attributes |", myLength),"            |\n")
+  l9 <- "+-------------------------------------------+\n"
+  
+  cat(paste(l1, l2, l3, l4, l5, l6, l7, l8, l9, sep = ""))
+  
+  
+  #print(paste("Mean:", mean(data)))
+  #print(paste("Median:", median(data)))
+  #print(paste("Standard deviation:", sd(data)))
+  #print(paste("Min:", min(data)))
+  #print(paste("Max:", max(data)))
+  #print(paste("Skewness:", skewness(data)))
+  #print(paste("Number of attributes:", length(data)))
 }
 
 drawPlot <- function(data, col, xName){
-  p <- ggplot(data, aes(x=col)) + 
-    geom_histogram(aes(y=..density..), binwidth=.5, colour="black", fill="white") +
-    geom_density(alpha=.2, fill="#FF6666") +
-    labs(x = xName, title = paste("Plot of", xName, sep = " ")) +
-    theme(legend.position = "none", plot.title = element_text(hjust = 0.5))
+  p <- data %>%
+        #filter( price<300 ) %>%
+        ggplot( aes(x=col)) +
+        geom_density(fill="#69b3a2", color="#e9ecef", alpha=0.8) +
+        theme_ipsum() +
+        labs(x = xName, title = paste("Plot of", xName, sep = " ")) +
+        theme(legend.position = "none", plot.title = element_text(hjust = 0.5))
+  
+  # p <- ggplot(data, aes(x=col)) + 
+  #   geom_histogram(aes(y=..density..), binwidth=.5, colour="black", fill="white") +
+  #   geom_density(alpha=.2, fill="#FF6666") +
+  #   labs(x = xName, title = paste("Plot of", xName, sep = " ")) +
+  #   theme(legend.position = "none", plot.title = element_text(hjust = 0.5))
   print(p)
 }
 
-z.test = function(a, mu, var){
-  zeta = (mean(a) - mu) / (sqrt(var / length(a)))
-  return(zeta)
-}
+#z.test = function(a, mu, var){
+#  return(mean(a) - mu) / (sqrt(var / length(a)))
+#}
 #==============================================================================================================
 # Data import
 #==============================================================================================================
@@ -120,6 +155,8 @@ ISR2019_1_data <- read.csv(ISR2019_1_Path, stringsAsFactors=TRUE)
 ISR2019_2_data <- read.csv(ISR2019_2_Path, stringsAsFactors=TRUE)
 ISR2020_data <- read.csv(ISR2020_Path, stringsAsFactors=TRUE)
 ISR2022_data <- read.csv(ISR2022_Path, stringsAsFactors=TRUE)
+
+ncol(ISR2016_data)
 
 # Check the columns
 #colnames(criminal_data)
@@ -165,14 +202,14 @@ rm(dataPath,
    ISR2020_Path,
    ISR2022_Path)
 
-head(ISR)
-
 #==============================================================================================================
 # Data cleaning
 #==============================================================================================================
 
-#colnames(criminal_data)
+ISR[ISR==0] <- NA
+ISR[ISR=="J"] <- NA
 
+#colnames(criminal_data)
 criminal_data <- removeNA(criminal_data)
 ISR <- removeNA(ISR)
 
@@ -200,6 +237,26 @@ criminal_data <- transform(criminal_data,
                             Longitude = as.numeric(Longitude)
                             )
 
+
+# ISR <- transform(ISR,
+#                  AGE = as.integer(AGE),
+#                  HEIGHT = as.numeric(HEIGHT),
+#                  WEIGHT = as.numeric(WEIGHT),
+#                  RACE_CODE_CD = as.character(RACE_CODE_CD),
+#                  CITY = as.character(CITY),
+#                  DISTRICT = as.integer(DISTRICT),
+#                  BEAT = as.integer(BEAT)
+# )
+
+tempHi = as.character(ISR$HEIGHT)
+tempHi = as.numeric(gsub("^(.)(0)(.*)$", "\\1\\3", tempHi))
+count <- 1
+for (i in tempHi){
+  tempHi[count] <- format_number(i)
+  count <- count + 1
+}
+ISR$HEIGHT <- round(((tempHi* 0.01) * 30.48), 2)
+
 ISR <- transform(ISR,
                  AGE = as.integer(AGE),
                  HEIGHT = as.numeric(HEIGHT),
@@ -209,6 +266,8 @@ ISR <- transform(ISR,
                  DISTRICT = as.integer(DISTRICT),
                  BEAT = as.integer(BEAT)
                  )
+
+#explore(ISR)
 
 # Remove all of the variables that don't match IUCR type
 mystr <- sapply(list(levels(as.factor(IUCR_Data$IUCR))), paste, collapse = "|")
@@ -226,6 +285,13 @@ criminal_data <- criminal_data[grepl(mystr, criminal_data$Beat),]
 mystr <- sapply(list(levels(as.factor(Police_District$DIST_NUM))), paste, collapse = "|")
 criminal_data <- criminal_data[grepl(mystr, criminal_data$District),]
 
+criminal_data <- subset(criminal_data, Latitude>=41)
+criminal_data <- subset(criminal_data, Latitude<=43)
+
+criminal_data <- subset(criminal_data, Longitude>=-89)
+criminal_data <- subset(criminal_data, Longitude<=-85)
+
+
 # IF the city isn't CHICAGO, remove it
 ISR <- ISR[grepl("CHICAGO", ISR$CITY),]
 
@@ -240,25 +306,25 @@ ISR <- ISR[grepl(mystr, ISR$DISTRICT),]
 # Make sure that race matches the requirements in https://home.chicagopolice.org/wp-content/uploads/2020/08/ISR-Data-Dictionary.csv
 ISR <- ISR[grepl("BLK|WHI|API|WBH|WWH|I|U|P|WHT", ISR$RACE_CODE_CD),]
 
-# Transfer HEIGHT from inces to CM
-ISR$HEIGHT <- (2.54 * ISR$HEIGHT)
 
 # Limit age from 12 (before that parents would be responsible) to 120 (that is feezable maximum...).
 ISR <- subset(ISR, AGE>=12)
 ISR <- subset(ISR, AGE<=120)
 
-# Smallest person is 55cm, wile the tallest person is 270, we are using limit of 120 since this is where the extreme is in our dataset
+# Smallest person is 55cm, wile the tallest person is 270, we are using limit of 250 since this is where the extreme is in our dataset
 ISR <- subset(ISR, HEIGHT>=55)
-ISR <- subset(ISR, HEIGHT<=121)
+ISR <- subset(ISR, HEIGHT<=250)
 
 # Minimum weight is 25kg (since this is the lightest person on the globe), the heaviest person is 410kg which is another extreme, therefore we did set our max to 200kg 
 ISR <- subset(ISR, WEIGHT>=25)
 ISR <- subset(ISR, WEIGHT<=200)
 
-rm(mystr)
+rm(mystr, count, i, tempHi)
+
+#explore(ISR)
 
 #==============================================================================================================
-# TEMP!!! - Data exploration
+#  Data exploration - Crime over time
 #==============================================================================================================
 
 #--------------------------------
@@ -278,10 +344,10 @@ p <- data %>%
                  alpha=0.6, 
                  position = 'identity', 
                  bins=45) +
-  scale_fill_manual(values=c("#69b3a2", "#404080")) +
+  scale_fill_manual(values=c("#69b3a2", "#404080"), labels=c("Not\narrested", "Arrested")) +
   labs(x = "Year", 
        y = "Number of arrests", 
-       title = "True vs False arests over time") +
+       title = "Criminals arrested vs not arrested over time") +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(fill="")
 p
@@ -307,249 +373,245 @@ dateAndCount %>%
          month_day = as_date(paste(2021,month(month),day(month), sep = "-"))) %>%
   ggplot(aes(x = month_day, y = air)) +
   labs(x = "Month", 
-       y = "Crime rate (in thousands)", 
-       title = "Crime over time") +
+       y = "Crime rate", 
+       title = "Crime over time between 2001 and 2022") +
   geom_line() +
   scale_x_date(labels = scales::date_format("%b"), breaks = "1 month") +
   facet_wrap(~year) +
-  theme(axis.text.x = element_text(angle = 90,
-                                   vjust = 0.5,
-                                   hjust = 1))
+  theme(plot.title = element_text(hjust = 0.5), axis.text.x = element_text(angle = 90,
+                                                                           vjust = 0.5,
+                                                                           hjust = 1))
 
-rm(i, myNewData, newCount, newDate)
+# Subset 1
+tmp <- (subset(criminal_data, Date> "2020-05-28" & Date < "2020-06-28"))
+data <- data.frame(
+  type = c( tmp$Arrest[tmp$Arrest == "TRUE"], 
+            tmp$Arrest[tmp$Arrest == "FALSE"]),
+  value = tmp$Date
+)
 
-#==============================================================================================================
-# Data exploration
-#==============================================================================================================
+# Plot number of TRUE vs FALSE arrests 
+p <- data %>%
+  ggplot( aes(x=value, fill=type)) +
+  geom_histogram(color="#e9ecef", 
+                 alpha=0.6, 
+                 position = 'identity', 
+                 bins=45) +
+  scale_fill_manual(values=c("#69b3a2", "#404080")) +
+  labs(x = "Year", 
+       y = "Number of arrests", 
+       title = "Criminals arrested vs not arrested in Jun") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(fill="")
+p
 
-explore(criminal_data)
+# Subset 2
+tmp <- (subset(criminal_data, Date> "2020-05-30" & Date < "2020-06-04"))
+data <- data.frame(
+  type = c( tmp$Arrest[tmp$Arrest == "TRUE"], 
+            tmp$Arrest[tmp$Arrest == "FALSE"]),
+  value = tmp$Date
+)
 
-opt <- options("scipen" = 20)
-op <- par(mar = c(5,7,4,2) + 0.1)
+# Plot number of TRUE vs FALSE arrests 
+p <- data %>%
+  ggplot( aes(x=value, fill=type)) +
+  geom_histogram(color="#e9ecef", 
+                 alpha=0.6, 
+                 position = 'identity', 
+                 bins=45) +
+  scale_fill_manual(values=c("#69b3a2", "#404080")) +
+  labs(x = "Year", 
+       y = "Number of arrests", 
+       title = "Criminals arrested vs not arrested in first week of Jun") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(fill="")
+p
 
-# Attributes:
-# "ID" - unique IDs
-table(criminal_data$ID)
-
-# "Case.Number" - unique IDs
-table(criminal_data$Case.Number)
-
-# "Date" - data of the crime
-table(criminal_data$Date)
-hist(table(criminal_data$Date), main = "Date")
-my_tab <- table(criminal_data$Date)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Date")
-head(my_tab_sort2,54)
-#barplot(head(my_tab_sort2,54), main = "Date")
-barplot(head(my_tab_sort2,54), las = 1, ylab = "", main = "Date", ylim = c(0,200))
-title(line = 5.5)
-par(op)
-options(opt)
-
-
-# "Block" - location name
-table(criminal_data$Block)
-barplot(table(criminal_data$Block), main = "Block")
-my_tab <- table(criminal_data$Block)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Block")
-head(my_tab_sort2,30)
-#barplot(head(my_tab_sort2,30), main = "Block")
-barplot(head(my_tab_sort2,54), las = 1, ylab = "", main = "Block", ylim = c(0,16000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-
-# "IUCR" - Illinois Uniform Crime Reporting
-table(criminal_data$IUCR)
-barplot(table(criminal_data$IUCR), main = "IUCR")
-my_tab <- table(criminal_data$IUCR)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "IUCR")
-head(my_tab_sort2,30)
-#barplot(head(my_tab_sort2,30), main = "IUCR")
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "IUCR", ylim = c(0,700000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-
-# "Primary.Type" - primary description of crime
-table(criminal_data$Primary.Type)
-barplot(table(criminal_data$Primary.Type), main = "Primary.Type")
-my_tab <- table(criminal_data$Primary.Type)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Primary.Type")
-head(my_tab_sort2,30)
-#barplot(head(my_tab_sort2,30), main = "Primary.Type")
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "Primary.Type", ylim = c(0,2000000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Description" - secondary description of crime
-table(criminal_data$Description)
-barplot(table(criminal_data$Description), main = "Description")
-my_tab <- table(criminal_data$Description)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Description")
-head(my_tab_sort2,30)
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "Description", ylim = c(0,800000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Location.Description" - description of where crime happened
-table(criminal_data$Location.Description)
-barplot(table(criminal_data$Location.Description), main = "Location.Description")
-my_tab <- table(criminal_data$Location.Description)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Location.Description")
-head(my_tab_sort2,57)
-#barplot(head(my_tab_sort2,60), main = "Location.Description")
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "Location.Description", ylim = c(0,2000000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-
-# "Arrest" - if person was arrested or not
-table(criminal_data$Arrest)
-#barplot(table(criminal_data$Arrest), main = "Arrest")
-barplot(table(criminal_data$Arrest), las = 1, ylab = "", main = "Arrest", ylim = c(0,6000000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Domestic" - if person was domestic or not
-table(criminal_data$Domestic)
-#barplot(table(criminal_data$Domestic), main = "Domestic")
-barplot(table(criminal_data$Domestic), las = 1, ylab = "", main = "Domestic", ylim = c(0,7000000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Beat" - Smallest police selected area
-table(criminal_data$Beat)
-#barplot(table(criminal_data$Beat), main = "Beat")
-my_tab <- table(criminal_data$Beat)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Beat")
-head(my_tab_sort2,50)
-#barplot(head(my_tab_sort2,50), main = "Beat")
-barplot(head(my_tab_sort2,50), las = 1, ylab = "", main = "Beat", ylim = c(0,60000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "District" - District numbers
-table(criminal_data$District)
-barplot(table(criminal_data$District), main = "District")
-my_tab <- table(criminal_data$District)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-my_tab_sort2
-#barplot(my_tab_sort2, main = "District")
-barplot(my_tab_sort2, las = 1, ylab = "", main = "District",ylim = c(0,500000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-
-# "Ward" - Ward number
-table(criminal_data$Ward)
-barplot(table(criminal_data$Ward), main = "Ward")
-my_tab <- table(criminal_data$Ward)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-my_tab_sort2
-#barplot(my_tab_sort2, main = "Ward")
-barplot(my_tab_sort2, las = 1, ylab = "", main = "Ward",ylim = c(0,350000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Community.Area" = Community Area ID
-table(criminal_data$Community.Area)
-barplot(table(criminal_data$Community.Area), main = "Community.Area")
-my_tab <- table(criminal_data$Community.Area)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-my_tab_sort2
-#barplot(my_tab_sort2, main = "Community.Area")
-barplot(my_tab_sort2, las = 1, ylab = "", main = "Community Area",ylim = c(0,500000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "FBI.Code" - FBI.Code
-table(criminal_data$FBI.Code)
-barplot(table(criminal_data$FBI.Code), main = "FBI.Code")
-my_tab <- table(criminal_data$FBI.Code)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-my_tab_sort2
-#barplot(my_tab_sort2, main = "FBI.Code")
-barplot(my_tab_sort2, las = 1, ylab = "", main = "FBI.Code", ylim = c(0,2000000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Updated.On" When was last updated
-table(criminal_data$Updated.On)
-barplot(table(criminal_data$Updated.On), main = "Updated.On")
-my_tab <- table(criminal_data$Updated.On)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Updated.On")
-head(my_tab_sort2,30)
-#barplot(head(my_tab_sort2,54), main = "Updated.On")
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "Updated.On", ylim = c(0,3000000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Latitude" - LAT
-table(criminal_data$Latitude)
-barplot(table(criminal_data$Latitude), main = "Latitude")
-my_tab <- table(criminal_data$Latitude)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Latitude")
-head(my_tab_sort2,30)
-#barplot(head(my_tab_sort2,55), main = "Latitude")
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "Latitude", ylim = c(0,16000))
-title(line = 5.5)
-par(op)
-options(opt)
-
-# "Longitude" - LON
-table(criminal_data$Longitude)
-barplot(table(criminal_data$Longitude), main = "Longitude")
-my_tab <- table(criminal_data$Longitude)
-my_tab_sort2 <- my_tab[order(my_tab,decreasing = TRUE)]
-#barplot(head(my_tab_sort2,200), main = "Longitude")
-head(my_tab_sort2,30)
-#barplot(head(my_tab_sort2,60), main = "Longitude")
-barplot(head(my_tab_sort2,30), las = 1, ylab = "", main = "Longitude", ylim = c(0,16000))
-title(line = 5.5)
-par(op)
-options(opt)
-
+rm(i, myNewData, newCount, newDate, p, tmp)
 
 #==============================================================================================================
 # Data analysis
 #==============================================================================================================
-
+explore(ISR)
 
 dataStatistics(ISR$AGE)
 dataStatistics(ISR$HEIGHT)
 dataStatistics(ISR$WEIGHT)
 
+average(ISR$AGE)
+
+# Make the histogra
+
+
+
 drawPlot(ISR, ISR$AGE, "Age")
 drawPlot(ISR, ISR$HEIGHT, "Height")
 drawPlot(ISR, ISR$WEIGHT, "Weight")
 
-#Sample call
-z.test(ISR$AGE, 75, 18)
-z.test(ISR$HEIGHT, 75, 18)
-z.test(ISR$WEIGHT, 75, 18)
+#==============================================================================================================
+# Z test
+#==============================================================================================================
+
+library(BSDA)
+z.test(ISR$AGE, 
+       mu=42, 
+       alternative="greater", 
+       sigma.x = sd(ISR$AGE))
+
+#==============================================================================================================
+# Correlation and linear regression
+#==============================================================================================================
+
+cor.test(ISR$HEIGHT, ISR$WEIGHT)
+
+hist(criminal_data$Longitude)
+plot(HEIGHT ~ WEIGHT, data = ISR)
+
+person.lm <- lm(WEIGHT ~ HEIGHT, data = ISR)
+summary(person.lm)
+
+# 
+# lte_criminal_data$Latitude<-signif(lte_criminal_data$Latitude, digits = 4)
+# lte_criminal_data$Longitude<-signif(lte_criminal_data$Longitude, digits = 4)
+# #0.00000000000000022
+# 
+# library(ggplot2)
+# library(hrbrthemes)
+# library(hexbin)
+# 
+# ggplot(ISR, aes(x=HEIGHT, y=WEIGHT) ) +
+#   geom_hex(bins = 70) +
+#   scale_fill_continuous(type = "viridis") +
+#   theme_bw()
+# 
+# 
+# 
+# library(ggplot2)
+# library(hrbrthemes)
+# 
+# # Create dummy data
+# data <- data.frame(
+#   cond = rep(c("condition_1", "condition_2"), each=10), 
+#   my_x = 1:100 + rnorm(100,sd=9), 
+#   my_y = 1:100 + rnorm(100,sd=16) 
+# )
+# 
+# head(data)
+# 
+# # Basic scatter plot.
+# p1 <- ggplot(data, aes(x=my_x, y=my_y)) + 
+#   geom_point( color="#69b3a2") +
+#   theme_ipsum()
+# 
+# p1 <- ggplot(ISR, aes(x=HEIGHT, y=WEIGHT)) + 
+#   geom_point( color="#69b3a2") +
+#   theme_ipsum()
+# 
+# p1
+# 
+# # with linear trend
+# p2 <- ggplot(data, aes(x=my_x, y=my_y)) +
+#   geom_point() +
+#   geom_smooth(method=lm , color="red", se=FALSE) +
+#   theme_ipsum()
+# 
+# p2 <- ggplot(ISR, aes(x=HEIGHT, y=WEIGHT)) +
+#   geom_point() +
+#   geom_smooth(method=lm , color="red", se=FALSE) +
+#   theme_ipsum()
+# 
+# p2
+# 
+# # linear trend + confidence interval
+# p3 <- ggplot(data, aes(x=my_x, y=my_y)) +
+#   geom_point() +
+#   geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+#   theme_ipsum()
+# 
+# tmp2 <- head(criminal_data, 2000)
+# 
+# p3 <- ggplot(tmp2, aes(x=Latitude, y=Longitude)) +
+#   geom_point() +
+#   geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+#   theme_ipsum()
+# 
+# p3
+# 
+# 
+# p3 <- ggplot(criminal_data, aes(x=Latitude, y=Longitude)) +
+#   geom_point() +
+#   geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+#   theme_ipsum()
+# p3
+# 
+# 
+# lte_criminal_data <- head(criminal_data,100)
+# head(lte_criminal_data)
+# lte_criminal_data <- lte_criminal_data[,c("Latitude", "Longitude","District")]
+# lte_criminal_data$Latitude<-signif(lte_criminal_data$Latitude, digits = 4)
+# lte_criminal_data$Longitude<-signif(lte_criminal_data$Longitude, digits = 4)
+# table(lte_criminal_data)
+# 
+# head(lte_criminal_data)
+# 
+# library(ggmap)
+# library(tidyverse)
+# mymap <- get_map("Chicago.gov")
+# ggmap(mymap)
+# 
+# 
+# 
+# 
+# 
+# 
+# library(data.table)
+# lte_criminal_data <- setDT(lte_criminal_data)[,list(Count=.N),names(lte_criminal_data)]
+# 
+# head(lte_criminal_data)
+# ggplot() +
+#   geom_polygon(data = lte_criminal_data, aes(x=Longitude, y = Latitude), 
+#                fill="grey", alpha=0.3) +
+#   geom_point( data=lte_criminal_data, aes(x=Longitude, y=Latitude)) +
+#   theme_void() + ylim(40,49) + 
+#   coord_map() 
+# 
+# tmp2 <- map_data("world") %>% filter(region=="USA")
+# table(tmp2$subregion)
+# view(tmp2)
+# head(tmp2)
+# library(viridis)
+# # Left: use size and color
+# ggplot() +
+#   geom_polygon(data = tmp2, 
+#                aes(x=long, y = lat), 
+#                fill="grey", alpha=0.3) +
+#   geom_point( data=lte_criminal_data, 
+#               aes(x=Longitude, y=Latitude, size=Count, color=Count)) +
+#   scale_size_continuous(range=c(1,12)) +
+#   scale_color_viridis(trans="log") +
+#   theme_void() + ylim(40,49) + coord_map() 
+# 
+# library(ggplot2)
+# library(dplyr)
+# 
+# # Get the world polygon and extract UK
+# library(maps)
+# UK <- map_data("world") %>% filter(region=="UK")
+# head(UK)
+# data <- world.cities %>% filter(country.etc=="UK")
+# head(data)
+# 
+# data %>%
+#   arrange(pop) %>% 
+#   mutate( name=factor(name, unique(name))) %>% 
+#   ggplot() +
+#   geom_polygon(data = UK, aes(x=long, y = lat, group = group), 
+#                fill="grey", alpha=0.3) +
+#   geom_point( aes(x=long, y=lat, size=pop, color=pop), alpha=0.9) +
+#   scale_size_continuous(range=c(1,12)) +
+#   scale_color_viridis(trans="log") +
+#   theme_void() + ylim(50,59) + coord_map() + theme(legend.position="none")
 
 
 #==============================================================================================================
